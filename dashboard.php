@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'includes/functions.php';
+require_once 'inc/functions.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: index.php');
@@ -22,8 +22,26 @@ $data = get_data();
     <a href="logout.php">Logout</a>
     <h3>Data Pengguna</h3>
     <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Nama</th>
-            <th>Email</th>
+    <tr>
+        <th>ID</th>
+        <th>Nama</th>
+        <th>Email</th>
+        <th>Telepon</th>
+        <th>Aksi</th>
+    </tr>
+    <?php while($row = mysqli_fetch_assoc($data)): ?>
+    <tr>
+        <td><?= $row['id']; ?></td>
+        <td><?= $row['name']; ?></td>
+        <td><?= $row['email']; ?></td>
+        <td><?= blowfish_decrypt($row['phone'], $row['public_key']); ?></td>
+        <td>
+            <a href="edit_data.php?id=<?= $row['id']; ?>">Edit</a>
+            <a href="delete_data.php?id=<?= $row['id']; ?>" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
+        </td>
+    </tr>
+    <?php endwhile; ?>
+</table>
+</body>
+</html>
            

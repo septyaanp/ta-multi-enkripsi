@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'includes/functions.php';
+require_once 'inc/functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];

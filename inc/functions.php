@@ -25,8 +25,8 @@ function add_data($name, $email, $phone) {
     global $conn;
     
     // Generate Diffie-Hellman keys
-    $prime = 23; // Contoh prima, gunakan yang lebih besar untuk keamanan yang lebih baik
-    $generator = 5;
+    $prime = gmp_nextprime(gmp_random_bits(2048));
+    $generator = 2;
     $private_key = rand(1, $prime-1);
     $public_key = diffie_hellman($prime, $generator, $private_key);
     
