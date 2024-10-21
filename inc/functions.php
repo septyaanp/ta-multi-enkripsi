@@ -16,9 +16,7 @@ function blowfish_encrypt($data, $key) {
 
 function blowfish_decrypt($data, $key) {
     $cipher = "bf-ecb";
-    $ivlen = openssl_cipher_iv_length($cipher);
-    $iv = openssl_random_pseudo_bytes($ivlen);
-    $decrypted = openssl_decrypt(base64_decode($data), $cipher, $key, 0, $iv);
+    $decrypted = openssl_decrypt(base64_decode($data), $cipher, $key, 0);
     return $decrypted;
 }
 
