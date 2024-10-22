@@ -1,18 +1,14 @@
 <?php
-session_start();
 require_once 'inc/functions.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: index.php');
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $id = $_POST['id'];
 
-$id = $_GET['id'];
-
-if (delete_data($id)) {
-    header('Location: dashboard.php');
-    exit;
-} else {
-    echo "Gagal menghapus data.";
+    if (delete_data($id)) {
+        header('Location: dashboard.php');
+        exit;
+    } else {
+        $error = 'Hapus data gagal';
+    }
 }
 ?>
