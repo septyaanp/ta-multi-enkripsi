@@ -1,13 +1,13 @@
 <?php
-session_start();
 require_once 'inc/functions.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: index.php');
+if (!isset($_SESSION['id'])) {
+    header('Location: login.php');
     exit;
 }
 
-$data = get_data();
+$id = $_SESSION['id'];
+$result = get_data();
 ?>
 
 <!DOCTYPE html>
