@@ -1,13 +1,14 @@
 <?php
+session_start();
 require_once 'inc/functions.php';
 
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
 
-$id = $_SESSION['id'];
-$result = get_data();
+$user_id = $_SESSION['user_id'];
+$data = get_data();
 ?>
 
 <!DOCTYPE html>
@@ -21,28 +22,26 @@ $result = get_data();
     <h2>Dashboard</h2>
     <a href="logout.php">Logout</a>
     <h3>Data Pengguna</h3>
-    <a href="add_data.php">Tambah Data Baru</a>
     <table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Nama</th>
-        <th>Email</th>
-        <th>Telepon</th>
-        <th>Aksi</th>
-    </tr>
-    <?php while($row = mysqli_fetch_assoc($data)): ?>
-    <tr>
-        <td><?= $row['id']; ?></td>
-        <td><?= $row['name']; ?></td>
-        <td><?= $row['email']; ?></td>
-        <td><?= blowfish_decrypt($row['phone'], $row['blowfish_key']); ?></td>
-        <td>
-            <a href="edit_data.php?id=<?= $row['id']; ?>">Edit</a>
-            <a href="delete_data.php?id=<?= $row['id']; ?>" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
-        </td>
-    </tr>
-    <?php endwhile; ?>
-</table>
+        <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Telepon</th>
+            <th>Aksi</th>
+        </tr>
+        <?php while($row = mysqli_fetch_assoc($data)): ?>
+        <tr>
+            <td><?= $row['id']; ?></td>
+            <td><?= $row['name']; ?></td>
+            <td><?= $row['email']; ?></td>
+            <td><?= decrypt_phone ($row['phone'], $row['private_key']); ?></td>
+            <td>
+                <a href="edit_data.php?id=<?= $row['id']; ?>">Edit</a>
+                <a href="delete_data.php?id=<?= $row['id']; ?>">Hapus</a>
+            </td>
+        </tr>
+        <?php endwhile; ?>
+    </table>
 </body>
 </html>
-           
