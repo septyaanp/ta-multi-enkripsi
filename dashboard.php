@@ -34,7 +34,7 @@ $data = get_data();
         <td><?= $row['id']; ?></td>
         <td><?= $row['name']; ?></td>
         <td><?= $row['email']; ?></td>
-        <td><?= blowfish_decrypt($row['phone'], $row['public_key']); ?></td>
+        <td><?= blowfish_decrypt($row['phone'], $row['blowfish_key']); ?></td>
         <td>
             <a href="edit_data.php?id=<?= $row['id']; ?>">Edit</a>
             <a href="delete_data.php?id=<?= $row['id']; ?>" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
