@@ -1,16 +1,8 @@
 <?php
-session_start();
-require_once 'inc/config.php';
 require_once 'inc/functions.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header('Location: index.php');
-    exit;
-}
-
-$id = $_GET['id'];
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $id = $_POST['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
@@ -19,20 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: dashboard.php');
         exit;
     } else {
-        echo "Gagal mengedit data.";
+        $error = 'Edit data gagal';
     }
 }
-
-// Ambil data pengguna untuk ditampilkan
-$sql = "SELECT * FROM users WHERE id = ?";
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $id);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$user = mysqli_fetch_assoc($result);
-
-// Dekripsi nomor telepon untuk ditampilkan
-$decrypted_phone = blowfish_decrypt($user['phone'], $user['public_key']);
 ?>
 
 <!DOCTYPE html>
