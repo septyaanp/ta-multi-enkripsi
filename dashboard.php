@@ -21,6 +21,7 @@ $data = get_data();
     <h2>Dashboard</h2>
     <a href="logout.php">Logout</a>
     <h3>Data Pengguna</h3>
+    <a href="add_data.php">Tambah Data Baru</a>
     <table border="1">
     <tr>
         <th>ID</th>

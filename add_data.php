@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
     <h2>Tambah Data Pengguna</h2>
+    <?php if (isset($error)) echo "<p style='color: red;'>$error</p>"; ?>
     <form method="POST" action="">
         <input type="text" name="name" placeholder="Nama" required>
         <input type="email" name="email" placeholder="Email" required>

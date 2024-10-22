@@ -30,6 +30,9 @@ mysqli_stmt_bind_param($stmt, "i", $id);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $user = mysqli_fetch_assoc($result);
+
+// Dekripsi nomor telepon untuk ditampilkan
+$decrypted_phone = blowfish_decrypt($user['phone'], $user['public_key']);
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +44,7 @@ $user = mysqli_fetch_assoc($result);
 </head>
 <body>
     <h2>Edit Data Pengguna</h2>
+    <?php if (isset($error)) echo "<p style='color: red;'>$error</p>"; ?>
     <form method="POST" action="">
         <input type="text" name="name" value="<?= $user['name']; ?>" required>
         <input type="email" name="email" value="<?= $user['email']; ?>" required>
