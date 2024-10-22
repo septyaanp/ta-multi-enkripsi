@@ -10,13 +10,18 @@ function diffie_hellman($prime, $generator, $private_key) {
 function blowfish_encrypt($data, $key) {
     $cipher = "bf-ecb";
     $ivlen = openssl_cipher_iv_length($cipher);
-    $encrypted = openssl_encrypt($data, $cipher, $key, 0);
-    return base64_encode($encrypted);
+    $iv = openssl_random_pseudo_bytes($ivlen);
+    $encrypted = openssl_encrypt($data, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+    return base64_encode($iv . $encrypted);
 }
 
 function blowfish_decrypt($data, $key) {
     $cipher = "bf-ecb";
-    $decrypted = openssl_decrypt(base64_decode($data), $cipher, $key, 0);
+    $ivlen = openssl_cipher_iv_length($cipher);
+    $data = base64_decode($data);
+    $iv = substr($data, 0, $ivlen);
+    $encrypted = substr($data, $ivlen);
+    $decrypted = openssl_decrypt($encrypted, $cipher, $key, OPENSSL_RAW_DATA, $iv);
     return $decrypted;
 }
 
@@ -24,19 +29,15 @@ function blowfish_decrypt($data, $key) {
 function add_data($name, $email, $phone) {
     global $conn;
     
-    // Generate Diffie-Hellman keys
-    $prime = gmp_nextprime(gmp_random_bits(2048));
-    $generator = 2;
-    $private_key = rand(1, $prime-1);
-    $public_key = diffie_hellman($prime, $generator, $private_key);
+    // Generate a simpler key for Blowfish
+    $blowfish_key = bin2hex(random_bytes(16)); // 32 karakter hex string
     
     // Enkripsi data menggunakan Blowfish
-    $blowfish_key = $public_key; // Gunakan public key sebagai kunci Blowfish
     $encrypted_phone = blowfish_encrypt($phone, $blowfish_key);
     
-    $sql = "INSERT INTO users (name, email, phone, public_key) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO users (name, email, phone, blowfish_key) VALUES (?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $encrypted_phone, $public_key);
+    mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $encrypted_phone, $blowfish_key);
     
     if(mysqli_stmt_execute($stmt)){
         return true;
@@ -44,7 +45,6 @@ function add_data($name, $email, $phone) {
         return false;
     }
 }
-
 // Fungsi untuk mengambil data
 function get_data() {
     global $conn;
