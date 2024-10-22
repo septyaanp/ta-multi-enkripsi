@@ -25,11 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <h2>Register</h2>
     <form method="POST" action="">
-        <input type="text" name="name" placeholder="Nama" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="text" name="phone" placeholder="Telepon" required>
-        <button type="submit">Daftar</button>
-    </form>
+    <input type="text" name="name" placeholder="Nama" required>
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="phone" placeholder="Telepon" required>
+    <button type="submit">Daftar</button>
+</form>
     <p>Sudah punya akun? <a href="index.php">Login</a></p>
 </body>
 </html>

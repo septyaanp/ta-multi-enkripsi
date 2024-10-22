@@ -8,7 +8,7 @@ function diffie_hellman($prime, $generator, $private_key) {
 
 // Fungsi Blowfish
 function blowfish_encrypt($data, $key) {
-    $cipher = "bf-ecb";
+    $cipher = "bf-cbc";
     $ivlen = openssl_cipher_iv_length($cipher);
     $iv = openssl_random_pseudo_bytes($ivlen);
     $encrypted = openssl_encrypt($data, $cipher, $key, OPENSSL_RAW_DATA, $iv);
@@ -16,13 +16,12 @@ function blowfish_encrypt($data, $key) {
 }
 
 function blowfish_decrypt($data, $key) {
-    $cipher = "bf-ecb";
+    $cipher = "bf-cbc";
     $ivlen = openssl_cipher_iv_length($cipher);
     $data = base64_decode($data);
     $iv = substr($data, 0, $ivlen);
     $encrypted = substr($data, $ivlen);
-    $decrypted = openssl_decrypt($encrypted, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-    return $decrypted;
+    return openssl_decrypt($encrypted, $cipher, $key, OPENSSL_RAW_DATA, $iv);
 }
 
 // Fungsi untuk menambah data
@@ -30,7 +29,7 @@ function add_data($name, $email, $phone) {
     global $conn;
     
     // Generate a simpler key for Blowfish
-    $blowfish_key = bin2hex(random_bytes(16)); // 32 karakter hex string
+    $blowfish_key = substr(bin2hex(random_bytes(56)), 0, 56); // 32 karakter hex string
     
     // Enkripsi data menggunakan Blowfish
     $encrypted_phone = blowfish_encrypt($phone, $blowfish_key);
