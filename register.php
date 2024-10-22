@@ -2,17 +2,17 @@
 require_once 'inc/functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = $_POST['name'];
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $name = $_POST['name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
 
-    if (add_data($name, $username, $password, $email, $phone)) {
-        header('Location: index.php');
+    if (register($username, $password, $name , $email, $phone)) {
+        header('Location: login.php');
         exit;
     } else {
-        echo "Gagal mendaftar.";
+        $error = 'Registrasi gagal';
     }
 }
 ?>
