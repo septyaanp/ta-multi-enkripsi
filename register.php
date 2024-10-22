@@ -3,10 +3,12 @@ require_once 'inc/functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
 
-    if (add_data($name, $email, $phone)) {
+    if (add_data($name, $username, $password, $email, $phone)) {
         header('Location: index.php');
         exit;
     } else {

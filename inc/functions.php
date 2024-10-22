@@ -25,23 +25,27 @@ function blowfish_decrypt($data, $key) {
 }
 
 // Fungsi untuk menambah data
-function add_data($name, $email, $phone) {
+function add_data($name, $username, $password, $email, $phone) {
     global $conn;
     
-    // Generate a simpler key for Blowfish
-    $blowfish_key = substr(bin2hex(random_bytes(56)), 0, 56); // 32 karakter hex string
-    
-    // Enkripsi data menggunakan Blowfish
+    $blowfish_key = substr(bin2hex(random_bytes(56)), 0, 56);
     $encrypted_phone = blowfish_encrypt($phone, $blowfish_key);
     
-    $sql = "INSERT INTO users (name, email, phone, blowfish_key) VALUES (?, ?, ?, ?)";
+    // Hash password sebelum disimpan
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    
+    $sql = "INSERT INTO users (name, username, password, email, phone, blowfish_key) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "ssss", $name, $email, $encrypted_phone, $blowfish_key);
+    if (!$stmt) {
+        return "Error preparing statement: " . mysqli_error($conn);
+    }
+    
+    mysqli_stmt_bind_param($stmt, "ssssss", $name, $username, $hashed_password, $email, $encrypted_phone, $blowfish_key);
     
     if(mysqli_stmt_execute($stmt)){
         return true;
     } else {
-        return false;
+        return "Error executing statement: " . mysqli_stmt_error($stmt);
     }
 }
 // Fungsi untuk mengambil data
